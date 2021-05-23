@@ -1,0 +1,14 @@
+FROM continuumio/anaconda3
+
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+
+ADD poetry.lock /workspace/sm_widgets/
+ADD pyproject.toml /workspace/sm_widgets/
+ADD sm_widgets /workspace/sm_widgets/sm_widgets
+
+RUN cd /workspace/sm_widgets && poetry install
+RUN pip install ruamel.yaml ujson chardet ipython matplotlib python-slugify rocksdb
+RUN pip install redis pydot rdflib
+
+ENV PYTHONPATH=/workspace/sm-dev/sm:/workspace/sm-dev/kg_data:/workspace/sm-dev/grams

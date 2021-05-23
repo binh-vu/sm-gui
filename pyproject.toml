@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "sm_widgets"
+version = "0.1.3"
+description = ""
+authors = ["Binh Vu <binh@toan2.com>"]
+license = "MIT"
+packages = [
+    { include = "sm_widgets" },
+    { include = "sm_widgets_integration" }
+]
+include = [
+    "webapps/annotator/dist/main.js.gz",
+    "webapps/foldable_list/dist/main.js.gz",
+    "webapps/slider/dist/main.js.gz"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+elasticsearch = "^7.12.1"
+fuzzywuzzy = "^0.18.0"
+ipycallback = "^0.2.5"
+requests = "^2.25.1"
+tqdm = "^4.60.0"
+loguru = "^0.5.3"
+orjson = "^3.5.2"
+python-slugify = "^5.0.2"
+kgdata = "^1.1.0"
+sem-desc = "^0.1.1"
+#sm = { path = "../sm", develop = true }
+#kg_data = { path = "../kg_data", develop = true }
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.extras]
+integration = ['kg-data']
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

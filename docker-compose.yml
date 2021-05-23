@@ -1,0 +1,12 @@
+version: '2.0'
+services:
+  jupyterlab:
+    build: .
+    image: sm-gui
+    ports:
+    - "8888:8888"
+    volumes:
+    - ./examples:/workspace/sm-dev/sm-gui/examples
+    - ../data:/workspace/sm-dev/data
+    working_dir: /workspace/sm-dev/sm-gui/examples
+    command: jupyter lab --ip=0.0.0.0 --allow-root --NotebookApp.token='' --NotebookApp.password=''
