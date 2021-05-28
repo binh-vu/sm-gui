@@ -1,44 +1,44 @@
-0	1	http://wikidata.org/entity/Q348260
-0	4	http://wikidata.org/entity/Q187255
-1	1	http://wikidata.org/entity/Q19597688
-1	4	http://wikidata.org/entity/Q154869
-1	5	http://wikidata.org/entity/Q663596
-2	1	http://wikidata.org/entity/Q415343
-2	4	http://wikidata.org/entity/Q187255
-2	5	http://wikidata.org/entity/Q470517	http://wikidata.org/entity/Q206921
-3	1	http://wikidata.org/entity/Q415264
-3	4	http://wikidata.org/entity/Q223591
-3	5	http://wikidata.org/entity/Q333718
-4	1	http://wikidata.org/entity/Q412323
-4	4	http://wikidata.org/entity/Q208414	http://wikidata.org/entity/Q29496	http://wikidata.org/entity/Q8084905
-4	5	http://wikidata.org/entity/Q212646	http://wikidata.org/entity/Q899140
-5	1	http://wikidata.org/entity/Q417317
-5	5	http://wikidata.org/entity/Q158205
-6	1	http://wikidata.org/entity/Q413299
-6	4	http://wikidata.org/entity/Q12078
-6	5	http://wikidata.org/entity/Q212646	http://wikidata.org/entity/Q899140
-7	1	http://wikidata.org/entity/Q412616
-7	4	http://wikidata.org/entity/Q128581
-7	5	http://wikidata.org/entity/Q212646	http://wikidata.org/entity/Q899140
-8	1	http://wikidata.org/entity/Q425681
-8	4	http://wikidata.org/entity/Q467635	http://wikidata.org/entity/Q954625
-8	5	http://wikidata.org/entity/Q842947
-9	1	http://wikidata.org/entity/Q2502747
-9	4	http://wikidata.org/entity/Q154869
-9	5	http://wikidata.org/entity/Q663596
-10	4	http://wikidata.org/entity/Q35869	http://wikidata.org/entity/Q199804
-10	5	http://wikidata.org/entity/Q212322
-11	1	http://wikidata.org/entity/Q415159
-11	4	http://wikidata.org/entity/Q389735
-11	5	http://wikidata.org/entity/Q731938
-0	2	http://wikidata.org/entity/Q29005938
-1	2	http://wikidata.org/entity/Q29005922
-2	2	http://wikidata.org/entity/Q29005794
-3	2	http://wikidata.org/entity/Q29006415
-4	2	http://wikidata.org/entity/Q29006155	http://wikidata.org/entity/Q412323
-5	2	http://wikidata.org/entity/Q29006109
-6	2	http://wikidata.org/entity/Q413299
-7	2	http://wikidata.org/entity/Q29005931
-8	2	http://wikidata.org/entity/Q29006434
-9	2	http://wikidata.org/entity/Q29006498
-11	2	http://wikidata.org/entity/Q47521418
+0	1	http://www.wikidata.org/entity/Q348260
+0	4	http://www.wikidata.org/entity/Q187255
+1	1	http://www.wikidata.org/entity/Q19597688
+1	4	http://www.wikidata.org/entity/Q154869
+1	5	http://www.wikidata.org/entity/Q663596
+2	1	http://www.wikidata.org/entity/Q415343
+2	4	http://www.wikidata.org/entity/Q187255
+2	5	http://www.wikidata.org/entity/Q470517	http://www.wikidata.org/entity/Q206921
+3	1	http://www.wikidata.org/entity/Q415264
+3	4	http://www.wikidata.org/entity/Q223591
+3	5	http://www.wikidata.org/entity/Q333718
+4	1	http://www.wikidata.org/entity/Q412323
+4	4	http://www.wikidata.org/entity/Q208414	http://www.wikidata.org/entity/Q29496	http://www.wikidata.org/entity/Q8084905
+4	5	http://www.wikidata.org/entity/Q212646	http://www.wikidata.org/entity/Q899140
+5	1	http://www.wikidata.org/entity/Q417317
+5	5	http://www.wikidata.org/entity/Q158205
+6	1	http://www.wikidata.org/entity/Q413299
+6	4	http://www.wikidata.org/entity/Q12078
+6	5	http://www.wikidata.org/entity/Q212646	http://www.wikidata.org/entity/Q899140
+7	1	http://www.wikidata.org/entity/Q412616
+7	4	http://www.wikidata.org/entity/Q128581
+7	5	http://www.wikidata.org/entity/Q212646	http://www.wikidata.org/entity/Q899140
+8	1	http://www.wikidata.org/entity/Q425681
+8	4	http://www.wikidata.org/entity/Q467635	http://www.wikidata.org/entity/Q954625
+8	5	http://www.wikidata.org/entity/Q842947
+9	1	http://www.wikidata.org/entity/Q2502747
+9	4	http://www.wikidata.org/entity/Q154869
+9	5	http://www.wikidata.org/entity/Q663596
+10	4	http://www.wikidata.org/entity/Q35869	http://www.wikidata.org/entity/Q199804
+10	5	http://www.wikidata.org/entity/Q212322
+11	1	http://www.wikidata.org/entity/Q415159
+11	4	http://www.wikidata.org/entity/Q389735
+11	5	http://www.wikidata.org/entity/Q731938
+0	2	http://www.wikidata.org/entity/Q29005938
+1	2	http://www.wikidata.org/entity/Q29005922
+2	2	http://www.wikidata.org/entity/Q29005794
+3	2	http://www.wikidata.org/entity/Q29006415
+4	2	http://www.wikidata.org/entity/Q29006155	http://www.wikidata.org/entity/Q412323
+5	2	http://www.wikidata.org/entity/Q29006109
+6	2	http://www.wikidata.org/entity/Q413299
+7	2	http://www.wikidata.org/entity/Q29005931
+8	2	http://www.wikidata.org/entity/Q29006434
+9	2	http://www.wikidata.org/entity/Q29006498
+11	2	http://www.wikidata.org/entity/Q47521418
