@@ -608,10 +608,10 @@ class Annotator(_Annotator):
 class BatchAnnotator(Slider):
 
     def __init__(self, annotator: Annotator, dev: bool = False):
-        super().__init__(annotator, annotator.annotate, dev)
+        super().__init__(annotator, annotator.set_data, dev)
 
-    def batch_annotate(self, tables_with_ids: List[Tuple[str, str, Table]], start_index: int=0):
-        self.set_data([
-            dict(description=description, args=(table_id, table))
-            for table_id, description, table in tables_with_ids
+    def set_data(self, tables_with_ids: List[Tuple[str, str, Table, Optional[List[O.SemanticModel]]]], start_index: int=0):
+        super().set_data([
+            dict(description=description, args=(table_id, table, sms))
+            for table_id, description, table, sms in tables_with_ids
         ], start_index)

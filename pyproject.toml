@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sm_widgets"
-version = "0.1.6"
+version = "0.1.10"
 description = ""
 authors = ["Binh Vu <binh@toan2.com>"]
 license = "MIT"
@@ -9,9 +9,6 @@ packages = [
     { include = "sm_widgets_integration" }
 ]
 include = [
-    "webapps/annotator/dist/main.js.gz",
-    "webapps/foldable_list/dist/main.js.gz",
-    "webapps/slider/dist/main.js.gz"
 ]
 
 [tool.poetry.dependencies]
