@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sm_widgets"
-version = "0.1.10"
+version = "0.1.11"
 description = ""
 authors = ["Binh Vu <binh@toan2.com>"]
 license = "MIT"
@@ -21,15 +21,13 @@ tqdm = "^4.60.0"
 loguru = "^0.5.3"
 orjson = "^3.5.2"
 python-slugify = "^5.0.2"
-kgdata = "^1.1.0"
-sem-desc = "^0.1.2"
-#sm = { path = "../sm", develop = true }
-#kg_data = { path = "../kg_data", develop = true }
+kgdata = "^1.1.8"
+sem-desc = "^0.1.5"
 
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.extras]
-integration = ['kg-data']
+integration = []
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from rdflib import RDFS
+
 from sm.misc import OntNS
 
 from kgdata.wikidata.models import QNode, WDClass, WDProperty, DataValue
 import kgdata.wikidata.db as kg_db
 from sm_widgets.models import Entity, Value, OntClass, OntProperty
 from sm_widgets.models.entity import ValueType, Statement
+from sm_widgets.services.search import OntologyClassSearch, OntologyPropertySearch
 from sm_widgets_integration.common import StoreWrapper
 
 
@@ -131,8 +134,55 @@ def get_ontprop_db(db_or_dbfile: str, read_only=False, proxy: bool=False):
     return StoreWrapper(db, GramsIntFn.key_deser, GramsIntFn.ont_prop_deser)
 
 
+def index_ontology(eshost: str):
+    wdprops = WDProperty.from_file()
+    docs = [
+        {
+            "id": wdprop.id,
+            "uri": wdprop.get_uri(),
+            "label": str(wdprop.label),
+            "readable_label": f"{wdprop.label} ({wdprop.id})",
+            "aliases": [str(x) for x in wdprop.aliases],
+            "description": str(wdprop.description)
+        }
+        for wdprop in wdprops.values()
+    ]
+    docs.append({
+        "id": str(RDFS.label),
+        "uri": str(RDFS.label),
+        "label": "rdfs:label",
+        "readable_label": "rdfs:label",
+        "aliases": ["label"],
+        "description": ["label of a resource"]
+    })
+    OntologyPropertySearch(eshost).load2index(docs)
+
+    wdclasses = WDClass.from_file()
+    docs = [
+        {
+            "id": wdclass.id,
+            "uri": wdclass.get_uri(),
+            "label": str(wdclass.label),
+            "readable_label": f"{wdclass.label} ({wdclass.id})",
+            "aliases": [str(x) for x in wdclass.aliases],
+            "description": str(wdclass.description)
+        }
+        for wdclass in wdclasses.values()
+    ]
+    docs.append({
+        "id": "http://wikiba.se/ontology#Statement",
+        "uri": "http://wikiba.se/ontology#Statement",
+        "label": "wikibase:Statement",
+        "readable_label": "wikibase:Statement",
+        "aliases": ["statement"],
+        "description": "Wikidata Statement"
+    })
+    OntologyClassSearch(eshost).load2index(docs)
+
+
 if __name__ == '__main__':
-    db = get_qnode_db("/workspace/sm-dev/grams/data/qnodes.db", proxy=True)
-    url = 'http://www.w3.org/2000/01/rdf-schema#label'
-    print(url in db)
-    print(db.get(url, None))
+    # db = get_qnode_db("/workspace/sm-dev/grams/data/qnodes.db", proxy=True)
+    # url = 'http://www.w3.org/2000/01/rdf-schema#label'
+    # print(url in db)
+    # print(db.get(url, None))
+    index_ontology("http://localhost:9200")

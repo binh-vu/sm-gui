@@ -100,8 +100,10 @@ class Annotator(_Annotator):
             note = data['note']
 
         self.session = Session(id, is_curated, note, tbl, sms)
-        if len(sms) == 0:
-            self.session.graphs.append(self.add_default_nodes_to_sm(O.SemanticModel()))
+        if len(self.session.graphs) == 0:
+            self.session.graphs.append(O.SemanticModel())
+        self.session.graphs = [self.add_default_nodes_to_sm(sm) for sm in self.session.graphs]
+
         self.tunnel.send_msg(orjson.dumps([
             {
                 "type": "wait_for_client_ready",

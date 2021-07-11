@@ -4,14 +4,12 @@ from elasticsearch import Elasticsearch, helpers
 import requests
 from tqdm.auto import tqdm
 
-from sm_widgets.models.ontology import OntClass
-
 
 class ElasticSearchService:
     def __init__(self, eshost: str, index: str):
         self.eshost = eshost
         self.index = index
-        self.fields = ['id', 'label', 'readable_label', 'aliases', 'description']
+        self.fields = ['id', 'label', 'uri', 'readable_label', 'aliases', 'description']
         self.search_fields = ['id^10', 'label^5', 'aliases^3', 'description']
 
     def search(self, query, top_k: int = 20):
@@ -36,11 +34,11 @@ class ElasticSearchService:
             })
         return docs
 
-    def load2index(self, documents: list, batch_size: int = 128):
+    def load2index(self, documents: List[dict], batch_size: int = 128):
         self.create_index()
         es = Elasticsearch([self.eshost])
         docs = [
-            dict(_id=doc.id, **{k: getattr(doc, k) for k in self.fields})
+            dict(_id=doc['id'], **{k: doc[k] for k in self.fields})
             for doc in documents
         ]
         for i in tqdm(range(0, len(docs), batch_size)):
@@ -99,3 +97,5 @@ class OntologyClassSearch(ElasticSearchService):
 class OntologyPropertySearch(ElasticSearchService):
     def __init__(self, eshost: str):
         super().__init__(eshost, "ontology-properties")
+
+
