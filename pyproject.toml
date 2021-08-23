@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sm_widgets"
-version = "0.1.11"
+version = "0.1.12"
 description = ""
 authors = ["Binh Vu <binh@toan2.com>"]
 license = "MIT"
@@ -22,7 +22,7 @@ loguru = "^0.5.3"
 orjson = "^3.5.2"
 python-slugify = "^5.0.2"
 kgdata = "^1.1.8"
-sem-desc = "^0.1.5"
+sem-desc = "^0.1.9"
 
 [tool.poetry.dev-dependencies]
 

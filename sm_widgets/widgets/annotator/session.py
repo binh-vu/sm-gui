@@ -27,7 +27,7 @@ class Session:
         return {
             "version": 2,
             "table_id": self.table.id,
-            "semantic_models": [sm.to_json() for sm in self.graphs],
+            "semantic_models": [sm.to_dict() for sm in self.graphs],
             "is_curated": self.is_curated,
             "note": self.note,
         }

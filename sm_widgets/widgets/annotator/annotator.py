@@ -95,7 +95,7 @@ class Annotator(_Annotator):
         else:
             data = M.deserialize_json(infile)
             assert data['version'] == 2
-            sms = [O.SemanticModel.from_json(sm) for sm in data['semantic_models']]
+            sms = [O.SemanticModel.from_dict(sm) for sm in data['semantic_models']]
             is_curated = data['is_curated']
             note = data['note']
 
