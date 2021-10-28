@@ -17,14 +17,14 @@ def convert_table(table: LinkedTable):
         links.append([
             [
                 Link(start=link.start, end=link.end, url=link.url,
-                     entity=f"http://www.wikidata.org/entity/{link.qnode_id}" if link.qnode_id is not None else None)
+                     entity=f"http://www.wikidata.org/entity/{link.entity_id}" if link.entity_id is not None else None)
                 for link in clinks
             ]
             for clinks in rlinks
         ])
     context_values = []
-    if table.context.page_qnode is not None:
-        uri = f"http://www.wikidata.org/entity/{table.context.page_qnode}"
+    if table.context.page_entity is not None:
+        uri = f"http://www.wikidata.org/entity/{table.context.page_entity}"
         context_values.append(Value(ValueType.URI, value=uri))
     return Table(table=table.table, context_values=context_values, context_tree=[], links=links)
 
@@ -48,7 +48,7 @@ class GRAMSAnnotatorAssistant(AnnotatorAssistant):
         assert isinstance(source_node, int) or isinstance(target_node,
                                                           int), "Can only get row index for at least one column"
         if isinstance(source_node, str):
-            if table.context.page_qnode == source_node:
+            if table.context.page_entity == source_node:
                 # TODO: get context node id, is there any better way to do it?
                 source_id = f"ent:{source_node}"
             else:
@@ -58,7 +58,7 @@ class GRAMSAnnotatorAssistant(AnnotatorAssistant):
 
         if isinstance(target_node, str):
             # TODO: fix me after we fix the data graph
-            if table.context.page_qnode == target_node:
+            if table.context.page_entity == target_node:
                 # TODO: get context node id, is there any better way to do it?
                 target_id = f"ent:{target_node}"
             else:
