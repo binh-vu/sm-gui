@@ -8,32 +8,52 @@ from grams.inputs.linked_table import LinkedTable
 from kgdata.wikidata.models import QNode, WDProperty
 from sm_widgets.models import Link, Value, Table
 from sm_widgets.models.entity import ValueType
-from sm_widgets.widgets.annotator.assistant import AnnotatorAssistant, ColumnRelationshipResult, ColumnRelationship
+from sm_widgets.widgets.annotator.assistant import (
+    AnnotatorAssistant,
+    ColumnRelationshipResult,
+    ColumnRelationship,
+)
 
 
 def convert_table(table: LinkedTable):
     links = []
     for rlinks in table.links:
-        links.append([
+        links.append(
             [
-                Link(start=link.start, end=link.end, url=link.url,
-                     entity=f"http://www.wikidata.org/entity/{link.entity_id}" if link.entity_id is not None else None)
-                for link in clinks
+                [
+                    Link(
+                        start=link.start,
+                        end=link.end,
+                        url=link.url,
+                        entity=f"http://www.wikidata.org/entity/{link.entity_id}"
+                        if link.entity_id is not None
+                        else None,
+                    )
+                    for link in clinks
+                ]
+                for clinks in rlinks
             ]
-            for clinks in rlinks
-        ])
+        )
     context_values = []
-    if table.context.page_entity is not None:
-        uri = f"http://www.wikidata.org/entity/{table.context.page_entity}"
+    if table.context.page_entity_id is not None:
+        uri = f"http://www.wikidata.org/entity/{table.context.page_entity_id}"
         context_values.append(Value(ValueType.URI, value=uri))
-    return Table(table=table.table, context_values=context_values, context_tree=[], links=links)
+    return Table(
+        table=table.table, context_values=context_values, context_tree=[], links=links
+    )
 
 
 class GRAMSAnnotatorAssistant(AnnotatorAssistant):
-
-    def __init__(self, inputs: List[TypedDict("input", table=LinkedTable, dg=nx.MultiDiGraph, sg=nx.MultiDiGraph)],
-                 entities: Dict[str, QNode],
-                 wdprops: Dict[str, WDProperty]):
+    def __init__(
+        self,
+        inputs: List[
+            TypedDict(
+                "input", table=LinkedTable, dg=nx.MultiDiGraph, sg=nx.MultiDiGraph
+            )
+        ],
+        entities: Dict[str, QNode],
+        wdprops: Dict[str, WDProperty],
+    ):
         self.qnodes = entities
         self.wdprops = wdprops
 
@@ -41,14 +61,20 @@ class GRAMSAnnotatorAssistant(AnnotatorAssistant):
 
         self.table2g = {}
         for e in inputs:
-            self.table2g[e['table'].id] = (e['dg'], e['sg'])
+            self.table2g[e["table"].id] = (e["dg"], e["sg"])
 
-    def get_row_indices(self, table: LinkedTable, source_node: Union[int, str], target_node: Union[int, str],
-                        links: Tuple[str, str]):
-        assert isinstance(source_node, int) or isinstance(target_node,
-                                                          int), "Can only get row index for at least one column"
+    def get_row_indices(
+        self,
+        table: LinkedTable,
+        source_node: Union[int, str],
+        target_node: Union[int, str],
+        links: Tuple[str, str],
+    ):
+        assert isinstance(source_node, int) or isinstance(
+            target_node, int
+        ), "Can only get row index for at least one column"
         if isinstance(source_node, str):
-            if table.context.page_entity == source_node:
+            if table.context.page_entity_id == source_node:
                 # TODO: get context node id, is there any better way to do it?
                 source_id = f"ent:{source_node}"
             else:
@@ -58,7 +84,7 @@ class GRAMSAnnotatorAssistant(AnnotatorAssistant):
 
         if isinstance(target_node, str):
             # TODO: fix me after we fix the data graph
-            if table.context.page_entity == target_node:
+            if table.context.page_entity_id == target_node:
                 # TODO: get context node id, is there any better way to do it?
                 target_id = f"ent:{target_node}"
             else:
@@ -76,86 +102,120 @@ class GRAMSAnnotatorAssistant(AnnotatorAssistant):
             if not (eid == links[0] and peid == links[1]):
                 continue
 
-            stmt: SGStatementNode = sg.nodes[sid]['data']
+            stmt: SGStatementNode = sg.nodes[sid]["data"]
             for (source_flow, target_flow), stmt2prov in stmt.flow.items():
                 if target_flow.sg_target_id == vid and target_flow.edge_id == peid:
-                    dv = dg.nodes[target_flow.dg_target_id]['data']
+                    dv = dg.nodes[target_flow.dg_target_id]["data"]
                     if dv.is_cell:
                         rows.add(dv.row)
                     else:
-                        du = dg.nodes[source_flow.dg_source_id]['data']
+                        du = dg.nodes[source_flow.dg_source_id]["data"]
                         assert du.is_cell
                         rows.add(du.row)
         return rows
 
-    def get_column_relationships(self, table: LinkedTable, column_index: str) -> Optional[ColumnRelationshipResult]:
+    def get_column_relationships(
+        self, table: LinkedTable, column_index: str
+    ) -> Optional[ColumnRelationshipResult]:
         dg, sg = self.table2g[table.id]
         node_id = f"column-{column_index}"
 
         incomings = []
         for sid, _, eid, edata in sg.in_edges(node_id, data=True, keys=True):
             # get statement
-            s = sg.nodes[sid]['data']
+            s = sg.nodes[sid]["data"]
             inedges = list(sg.in_edges(sid, data=True, keys=True))
-            assert s.is_statement, f"Error in the semantic graph for column {column_index} (statement {sid})"
-            assert len(inedges) == 1, f"Error in the semantic graph for column {column_index} (statement {sid})"
+            assert (
+                s.is_statement
+            ), f"Error in the semantic graph for column {column_index} (statement {sid})"
+            assert (
+                len(inedges) == 1
+            ), f"Error in the semantic graph for column {column_index} (statement {sid})"
             uid, _, peid, pedata = inedges[0]
 
-            freq = s.compute_freq(None, None, edata['data'], is_unique_freq=False)
-            u = sg.nodes[uid]['data']
+            freq = s.compute_freq(None, None, edata["data"], is_unique_freq=False)
+            u = sg.nodes[uid]["data"]
             if u.is_column:
                 endpoint = u.column
             else:
-                if u.qnode_id[0] == 'P':
+                if u.qnode_id[0] == "P":
                     # bug here
-                    endpoint = {"uri": WDOnt.get_prop_uri(u.qnode_id), "label": self.wdont.get_pnode_label(u.qnode_id)}
+                    endpoint = {
+                        "uri": WDOnt.get_prop_uri(u.qnode_id),
+                        "label": self.wdont.get_pnode_label(u.qnode_id),
+                    }
                 else:
-                    endpoint = {"uri": WDOnt.get_qnode_uri(u.qnode_id), "label": self.wdont.get_qnode_label(u.qnode_id)}
+                    endpoint = {
+                        "uri": WDOnt.get_qnode_uri(u.qnode_id),
+                        "label": self.wdont.get_qnode_label(u.qnode_id),
+                    }
 
-            incomings.append(ColumnRelationship(
-                endpoint=endpoint,
-                predicates=(
-                    {"uri": WDOnt.get_prop_uri(peid), "label": self.wdont.get_pnode_label(peid)},
-                    {"uri": WDOnt.get_prop_uri(eid), "label": self.wdont.get_pnode_label(eid)},
-                ),
-                freq=freq
-            ))
+            incomings.append(
+                ColumnRelationship(
+                    endpoint=endpoint,
+                    predicates=(
+                        {
+                            "uri": WDOnt.get_prop_uri(peid),
+                            "label": self.wdont.get_pnode_label(peid),
+                        },
+                        {
+                            "uri": WDOnt.get_prop_uri(eid),
+                            "label": self.wdont.get_pnode_label(eid),
+                        },
+                    ),
+                    freq=freq,
+                )
+            )
 
         outgoings = []
         for _, sid, peid, pedata in sg.out_edges(node_id, data=True, keys=True):
             # get statement
-            s = sg.nodes[sid]['data']
+            s = sg.nodes[sid]["data"]
             outedges = list(sg.out_edges(sid, data=True, keys=True))
-            assert s.is_statement, f"Error in the semantic graph for column {column_index} (statement {sid})"
+            assert (
+                s.is_statement
+            ), f"Error in the semantic graph for column {column_index} (statement {sid})"
 
             for _, vid, eid, edata in outedges:
-                freq = s.compute_freq(None, None, edata['data'], is_unique_freq=False)
-                v = sg.nodes[vid]['data']
+                freq = s.compute_freq(None, None, edata["data"], is_unique_freq=False)
+                v = sg.nodes[vid]["data"]
                 if v.is_column:
                     endpoint = v.column
                 else:
                     assert v.is_value
                     if v.is_entity_value:
-                        if v.qnode_id[0] == 'P':
+                        if v.qnode_id[0] == "P":
                             # bug here
-                            endpoint = {"uri": WDOnt.get_prop_uri(v.qnode_id),
-                                        "label": self.wdont.get_pnode_label(v.qnode_id)}
+                            endpoint = {
+                                "uri": WDOnt.get_prop_uri(v.qnode_id),
+                                "label": self.wdont.get_pnode_label(v.qnode_id),
+                            }
                         else:
-                            endpoint = {"uri": WDOnt.get_qnode_uri(v.qnode_id),
-                                        "label": self.wdont.get_qnode_label(v.qnode_id)}
+                            endpoint = {
+                                "uri": WDOnt.get_qnode_uri(v.qnode_id),
+                                "label": self.wdont.get_qnode_label(v.qnode_id),
+                            }
                     else:
                         # not support yet
                         assert v.is_literal_value
                         continue
 
-                outgoings.append(ColumnRelationship(
-                    endpoint=endpoint,
-                    predicates=(
-                        {"uri": WDOnt.get_prop_uri(peid), "label": self.wdont.get_pnode_label(peid)},
-                        {"uri": WDOnt.get_prop_uri(eid), "label": self.wdont.get_pnode_label(eid)},
-                    ),
-                    freq=freq
-                ))
+                outgoings.append(
+                    ColumnRelationship(
+                        endpoint=endpoint,
+                        predicates=(
+                            {
+                                "uri": WDOnt.get_prop_uri(peid),
+                                "label": self.wdont.get_pnode_label(peid),
+                            },
+                            {
+                                "uri": WDOnt.get_prop_uri(eid),
+                                "label": self.wdont.get_pnode_label(eid),
+                            },
+                        ),
+                        freq=freq,
+                    )
+                )
 
         return dict(incoming=incomings, outgoing=outgoings)
 
