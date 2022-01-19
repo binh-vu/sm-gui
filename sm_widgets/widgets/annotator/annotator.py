@@ -397,7 +397,7 @@ class Annotator(_Annotator):
         table = self.session.table
         column2name = self.session.column2name
         for col in table.table.columns:
-            if not any(n.is_data_node and n.col_index == col.index for n in sm.iter_nodes()):
+            if not any(isinstance(n, O.DataNode) and n.col_index == col.index for n in sm.iter_nodes()):
                 # no column in the model, add missing columns
                 dnodeid = f'd-{col.index}'
                 assert not sm.has_node(dnodeid)
@@ -436,7 +436,7 @@ class Annotator(_Annotator):
     def serialize_sm(self, sm: O.SemanticModel):
         nodes = []
         for n in sm.iter_nodes():
-            if n.is_class_node:
+            if isinstance(n, O.ClassNode):
                 nodes.append({
                     "id": n.id,
                     "uri": n.abs_uri,
@@ -446,7 +446,7 @@ class Annotator(_Annotator):
                     "isDataNode": False,
                     "isLiteralNode": False,
                 })
-            elif n.is_data_node:
+            elif isinstance(n, O.DataNode):
                 nodes.append({
                     "id": n.id,
                     "label": self.session.column2name[n.col_index],
