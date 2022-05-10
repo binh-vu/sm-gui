@@ -17,12 +17,12 @@ elasticsearch = "^7.12.1"
 fuzzywuzzy = "^0.18.0"
 ipycallback = "^0.2.5"
 requests = "^2.27.1"
-tqdm = "^4.63.1"
-loguru = "^0.5.3"
-orjson = "^3.6.4"
+tqdm = "^4.64.0"
+loguru = ">=0.6.0"
+orjson = "^3.6.8"
 python-slugify = "^5.0.2"
-kgdata = "^1.6.0"
-sem-desc = "^3.0.0"
+kgdata = "^1.7.2"
+sem-desc = "^3.4.2"
 
 [tool.poetry.dev-dependencies]
 
