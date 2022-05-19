@@ -5,7 +5,7 @@ from rdflib import RDFS
 
 from sm.misc import OntNS
 
-from kgdata.wikidata.models import QNode, WDClass, WDProperty, DataValue
+from kgdata.wikidata.models import WDEntity, WDClass, WDProperty, WDValue
 import kgdata.wikidata.db as kg_db
 from sm_widgets.models import Entity, Value, OntClass, OntProperty
 from sm_widgets.models.entity import ValueType, Statement
@@ -17,7 +17,7 @@ class GramsIntFn:
     ontns = OntNS.get_instance()
 
     @dataclass
-    class WrapperQNode(Entity):
+    class WrapperWDEntity(Entity):
         id: str
 
         @property
@@ -51,7 +51,7 @@ class GramsIntFn:
         return uri
 
     @staticmethod
-    def qnode_deser(qnode: QNode):
+    def qnode_deser(qnode: WDEntity):
         props = {}
         for pid, stmts in qnode.props.items():
             new_stmts = []
@@ -67,7 +67,7 @@ class GramsIntFn:
                 )
                 new_stmts.append(new_stmt)
             props[f"http://www.wikidata.org/prop/{pid}"] = new_stmts
-        return GramsIntFn.WrapperQNode(
+        return GramsIntFn.WrapperWDEntity(
             id=qnode.id,
             uri=f"http://www.wikidata.org/entity/{qnode.id}",
             label=qnode.label,
@@ -108,7 +108,7 @@ class GramsIntFn:
         )
 
     @staticmethod
-    def wd_value_deser(val: DataValue):
+    def wd_value_deser(val: WDValue):
         if val.is_entity_id():
             ent_id = val.as_entity_id()
             if ent_id.startswith("Q"):
@@ -125,7 +125,7 @@ class GramsIntFn:
 
 def get_qnode_db(db_or_dbfile, read_only=False, proxy: bool = False):
     if isinstance(db_or_dbfile, (str, Path)):
-        db = kg_db.get_qnode_db(db_or_dbfile, read_only=read_only, proxy=proxy)
+        db = kg_db.get_entity_db(db_or_dbfile, read_only=read_only, proxy=proxy)
     else:
         db = db_or_dbfile
 
@@ -201,7 +201,7 @@ def index_ontology(eshost: str):
 
 
 if __name__ == "__main__":
-    # db = get_qnode_db("/workspace/sm-dev/grams/data/qnodes.db", proxy=True)
+    # db = entityorkspace/sm-dev/grams/data/qnodes.db", proxy=True)
     # url = 'http://www.w3.org/2000/01/rdf-schema#label'
     # print(url in db)
     # print(db.get(url, None))

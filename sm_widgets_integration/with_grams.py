@@ -5,7 +5,7 @@ import networkx as nx
 from grams.algorithm.semantic_graph import SGStatementNode
 from grams.algorithm.sm_wikidata import WDOnt
 from grams.inputs.linked_table import LinkedTable
-from kgdata.wikidata.models import QNode, WDProperty
+from kgdata.wikidata.models import WDEntity, WDProperty
 from sm_widgets.models import Link, Value, Table
 from sm_widgets.models.entity import ValueType
 from sm_widgets.widgets.annotator.assistant import (
@@ -51,7 +51,7 @@ class GRAMSAnnotatorAssistant(AnnotatorAssistant):
                 "input", table=LinkedTable, dg=nx.MultiDiGraph, sg=nx.MultiDiGraph
             )
         ],
-        entities: Dict[str, QNode],
+        entities: Dict[str, WDEntity],
         wdprops: Dict[str, WDProperty],
     ):
         self.qnodes = entities
