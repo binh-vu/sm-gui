@@ -21,8 +21,8 @@ tqdm = "^4.64.0"
 loguru = ">=0.6.0"
 orjson = "^3.6.8"
 python-slugify = "^5.0.2"
-kgdata = "^2.0.0"
-sem-desc = "^3.4.2"
+kgdata = "^2.2.1"
+sem-desc = "^3.5.1"
 
 [tool.poetry.dev-dependencies]
 
